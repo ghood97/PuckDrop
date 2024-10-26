@@ -1,0 +1,97 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using MudBlazor.Utilities
+@inherits LayoutComponentBase
+
+@inject AuthenticationStateProvider AuthState
+
+<MudLayout Style="height: 100%;">
+    <MudAppBar Elevation="1">
+        <MudGrid Class="align-center" Justify="Justify.SpaceBetween">
+            <MudItem>
+                <MudStack Row="true" Class="align-center">
+                    <MudIconButton Icon="@Icons.Material.Outlined.Menu" OnClick="@ToggleDrawer" />
+                    <MudText>
+                        PuckDrop Fantasy
+                    </MudText>
+                </MudStack>
+            </MudItem>
+            <MudItem>
+                <MudToolBar>
+                    <AuthorizeView>
+                        <Authorized>
+                            <MudButton Href="/MicrosoftIdentity/Account/EditProfile">Profile</MudButton>
+                            <MudButton Href="/MicrosoftIdentity/Account/SignOut">Sign Out</MudButton>
+                        </Authorized>
+                        <NotAuthorized>
+                            <MudButton Href="/MicrosoftIdentity/Account/SignIn">Login</MudButton>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </MudToolBar>
+            </MudItem>
+        </MudGrid>
+    </MudAppBar>
+    <DrawerMenu IsOpen="@DrawerIsOpen" />
+    <MudMainContent>
+            @Body
+    </MudMainContent>
+</MudLayout>
+<MudThemeProvider @ref="@_mudThemeProvider" IsDarkMode="IsDarkMode" Theme="_theme" />
+<MudDialogProvider FullWidth="false" />
+<MudPopoverProvider />
+<MudSnackbarProvider />
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    ClaimsPrincipal? User { get; set; }
+
+    private const string PRIMARY = "#0B5394";
+    private const string SECONDARY_COLOR = "#44908B";
+    private const string TERTIARY_COLOR = "#CD456B";
+    private const string MSFT_BLACK = "#171717";
+
+    public bool DrawerIsOpen { get; set; } = true;
+
+    public bool CanNavigateBack { get; set; } = false;
+    public bool DisplayBackButton { get; set; } = false;
+
+    public bool IsDarkMode { get; set; } = true;
+
+    private MudThemeProvider _mudThemeProvider = new();
+
+    private MudTheme _theme => new MudTheme()
+        {
+            PaletteLight = new PaletteLight()
+            {
+                Primary = new MudColor(PRIMARY),
+                Secondary = new MudColor(SECONDARY_COLOR),
+                Tertiary = new MudColor(TERTIARY_COLOR),
+                Black = new MudColor(MSFT_BLACK),
+                AppbarBackground = new MudColor(PRIMARY),
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = new MudColor(PRIMARY),
+                Secondary = new MudColor(SECONDARY_COLOR),
+                Tertiary = new MudColor(TERTIARY_COLOR),
+                Black = new MudColor(MSFT_BLACK),
+                AppbarBackground = new MudColor(PRIMARY),
+            }
+        };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthState.GetAuthenticationStateAsync();
+        User = authState.User;
+    }
+
+    private void ToggleDrawer()
+    {
+        DrawerIsOpen = !DrawerIsOpen;
+    }
+}

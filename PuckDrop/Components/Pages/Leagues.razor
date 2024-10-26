@@ -1,0 +1,47 @@
+﻿@page "/leagues"
+
+<ContentPage>
+    <MudStack Row>
+        <MudIconButton Icon="fa-solid fa-add" />
+        <MudStack>
+            <MudText Typo="Typo.h3">Leagues</MudText>
+            @if (AllLeagues.Count == 0)
+            {
+                <MudText>No leagues found</MudText>
+            }
+            else
+            {
+                <MudList T="string">
+                    @foreach (var league in AllLeagues)
+                    {
+                        <MudListItem>
+                            <MudText>@league.Name</MudText>
+                        </MudListItem>
+                    }
+                </MudList>
+            }
+        </MudStack>
+    </MudStack>
+</ContentPage>
+
+
+@code {
+    [Inject]
+    ILeagueService LeagueService { get; set; } = null!;
+    [Inject]
+    ISnackbarService SnackbarService { get; set; } = null!;
+
+    public List<League> AllLeagues { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            AllLeagues = await LeagueService.GetLeagues();
+        }
+        catch (Exception e)
+        {
+            SnackbarService.AddError("An error occurred while loading leagues: " + e.Message);
+        }
+    }
+}

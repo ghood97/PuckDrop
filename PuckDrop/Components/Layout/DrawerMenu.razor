@@ -1,0 +1,12 @@
+﻿<MudDrawer ClipMode="DrawerClipMode.Always" @bind-Open="@IsOpen" Elevation="0" Variant="@DrawerVariant.Responsive" Color="Color.Primary">
+    <MudNavMenu>
+        <MudNavLink Href="/leagues" Match="NavLinkMatch.All" Icon="fa-solid fa-list" IconColor="Color.Inherit">Leagues</MudNavLink>
+        <MudNavLink Href="/my-teams" Match="NavLinkMatch.All" Icon="fa-solid fa-people-group" IconColor="Color.Inherit">My Teams</MudNavLink>
+        <MudNavLink Href="/community" Match="NavLinkMatch.All" Icon="fa solid fa-earth-americas" IconColor="Color.Inherit">Community</MudNavLink>
+    </MudNavMenu>
+</MudDrawer>
+
+@code {
+    [Parameter]
+    public bool IsOpen { get; set; }
+}

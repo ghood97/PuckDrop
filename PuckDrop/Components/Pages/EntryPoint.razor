@@ -1,0 +1,24 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject NavigationManager Nav;
+
+@code
+{
+    [Inject]
+    public AuthenticationStateProvider AuthState { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState currentState = await AuthState.GetAuthenticationStateAsync();
+        bool isAuthenticated = currentState.User.Identity?.IsAuthenticated ?? false;
+        if (isAuthenticated)
+        {
+            Nav.NavigateTo("/home");
+        }
+        else
+        {
+            Nav.NavigateTo("/MicrosoftIdentity/Account/SignIn");
+        }
+    }
+}

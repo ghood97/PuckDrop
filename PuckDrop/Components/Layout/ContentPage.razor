@@ -1,0 +1,69 @@
+﻿@namespace PuckDrop.Components
+
+@if (IsLoading)
+{
+    <MudStack AlignItems="AlignItems.Center" Class="p-1" Style="width: 100%;">
+        <h3>Loading...</h3>
+    </MudStack>
+    <MudSkeleton SkeletonType="SkeletonType.Circle" Width="75px" Height="75px"></MudSkeleton>
+    <MudSkeleton Style="margin-top: 10px;" Height="10px" Width="100%"></MudSkeleton>
+    <MudSkeleton Style="margin-top: 10px;" Height="10px" Width="100%"></MudSkeleton>
+    <MudSkeleton Style="margin-top: 10px;" Height="10px" Width="100%"></MudSkeleton>
+    <MudSkeleton Style="margin-top: 20px;margin-bottom: 10px;" Width="75px" Height="30px"></MudSkeleton>
+    <MudProgressLinear Color="Color.Primary" Indeterminate />
+}
+else
+{
+    <div style="@(GetContainerStyle())">
+        @ChildContent
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsLoading { get; set; }
+
+    [Parameter]
+    public bool Border { get; set; } = false;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter]
+    public bool PaddingTop { get; set; } = true;
+
+    [Parameter]
+    public bool PaddingRight { get; set; } = true;
+
+    [Parameter]
+    public bool PaddingBottom { get; set; } = true;
+
+    [Parameter]
+    public bool PaddingLeft { get; set; } = true;
+
+    private string GetContainerStyle()
+    {
+        string style = "height: 100%;";
+        if (Border)
+        {
+            style += " border: 2px solid red;";
+        }
+        if (PaddingTop)
+        {
+            style += " padding-top: 1.5rem;";
+        }
+        if (PaddingRight)
+        {
+            style += " padding-right: 1.5rem;";
+        }
+        if (PaddingBottom)
+        {
+            style += " padding-bottom: 1.5rem;";
+        }
+        if (PaddingLeft)
+        {
+            style += " padding-left: 1.5rem;";
+        }
+        return style;
+    }
+}
